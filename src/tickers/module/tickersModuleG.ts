@@ -6,4 +6,4 @@ import { TickersService } from '../service/tickers.service';
   providers: [TickersService, TickersResolver],
   imports: [],
 })
-export class TickersModule {}
+export class TickersModuleG {}
