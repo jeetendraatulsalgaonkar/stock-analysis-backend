@@ -1,0 +1,51 @@
+type Query {
+    tickers: [Tickers]
+    ticker(id: ID!): Tickers
+}
+
+type Mutation {
+    createTickers(createTickersInput: CreateTickersInput): Tickers
+}
+
+type Subscription {
+    tickerCreated: Tickers
+}
+
+type Tickers {
+    id: Int
+    ticker_id: String!
+    ticker_name: String!
+    market: String
+    locale: String
+    primary_exchange: String
+    ticker_type: String
+    active: Boolean
+    currency_name: String
+    cik: String
+    composite_figi: String
+    share_class_figi: String
+    last_updated_utc: String
+    currency_symbol: String
+    base_currency_symbol: String
+    base_currency_name: String
+    source_feed: String
+}
+
+input CreateTickersInput {
+    ticker_id: String
+    ticker_name: String
+    market: String
+    locale: String
+    primary_exchange: String
+    ticker_type: String
+    active: Boolean
+    currency_name: String
+    cik: String
+    composite_figi: String
+    share_class_figi: String
+    last_updated_utc: String
+    currency_symbol: String
+    base_currency_symbol: String
+    base_currency_name: String
+    source_feed: String
+}
