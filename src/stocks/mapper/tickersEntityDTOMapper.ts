@@ -8,6 +8,7 @@ export class TickersEntityDTOMapper {
     const tickersDTO = new TickersDto();
     if (tickers != null) {
       tickersDTO.id = tickers.id;
+      tickersDTO.ticker_id = tickers.ticker_id;
       tickersDTO.ticker_name = tickers.ticker_name;
       tickersDTO.ticker_type = tickers.ticker_type;
       tickersDTO.market = tickers.market;

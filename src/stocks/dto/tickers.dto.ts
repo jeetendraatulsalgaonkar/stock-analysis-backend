@@ -1,6 +1,8 @@
 export class TickersDto {
   id?: number | null;
 
+  ticker_id?: string;
+
   ticker_name?: string | null;
 
   market?: string | null;

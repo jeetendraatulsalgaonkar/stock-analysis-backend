@@ -1,20 +1,56 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Tickers } from '../entity/tickers.entity';
 import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTOMapper';
+import { Op } from 'sequelize';
+import { TickersDto } from '../dto/tickers.dto';
+import { PaginationProperties } from '../stocks.type';
 
 @Injectable()
 export class StocksService {
   constructor(
     @Inject('TICKERS_REPOSITORY')
     private tickersRepository: typeof Tickers,
+
+    @Inject()
+    private tickersEntityDTOMapper: TickersEntityDTOMapper,
   ) {}
 
-  async fetchTickersFromQueryString() {
-    const tickers: Tickers | null =
-      await this.tickersRepository.findOne<Tickers>();
-    if (JSON.stringify(tickers) === '{}' || tickers === null) {
+  async fetchTickersFromQueryString(
+    queryString: string,
+    page: number,
+    size: number,
+  ) {
+    const tickers = await this.tickersRepository.findAndCountAll({
+      where: {
+        [Op.or]: [
+          {
+            ticker_id: { [Op.like]: `%${queryString}%` },
+          },
+          {
+            ticker_name: { [Op.like]: `%${queryString}%` },
+          },
+        ],
+      },
+      order: ['ticker_id'],
+      offset: page * size,
+      limit: size,
+    });
+    if (JSON.stringify(tickers) === '[]' || tickers === null) {
       throw new NotFoundException(`No tickers found`);
     }
-    return new TickersEntityDTOMapper().mapTickersEntityToDTO(tickers);
+    const data: TickersDto[] = tickers.rows.map((ticker) =>
+      this.tickersEntityDTOMapper.mapTickersEntityToDTO(ticker),
+    );
+    const response: { data: TickersDto[]; pageProps: PaginationProperties } = {
+      data,
+      pageProps: {
+        page,
+        size,
+        pageSize: size,
+        totalPages: Math.ceil(tickers.count / size),
+        totalElements: tickers.count,
+      },
+    };
+    return Promise.resolve(response);
   }
 }

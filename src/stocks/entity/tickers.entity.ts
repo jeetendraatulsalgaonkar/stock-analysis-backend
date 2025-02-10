@@ -7,6 +7,9 @@ export class Tickers extends Model {
   id: number;
 
   @Column
+  ticker_id: string;
+
+  @Column
   ticker_name: string;
 
   @Column
