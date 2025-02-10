@@ -4,11 +4,13 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { upperCaseDirectiveTransformer } from './stocks/directives/upper-case.directive';
 import { TickersModule } from './stocks/modules/tickers.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     TickersModuleG,
     TickersModule,
+    ConfigModule.forRoot({}),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.graphql'],
