@@ -18,7 +18,7 @@ describe('StockController', () => {
   });
 
   describe('root', () => {
-    it('should return []', async () => {
+    it('should return results', async () => {
       const result: TickersDto = {
         id: 5518,
         ticker_name: 'ALTERNATIVE INVSTMENT TR',

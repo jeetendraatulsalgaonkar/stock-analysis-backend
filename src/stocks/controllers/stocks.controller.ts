@@ -7,8 +7,6 @@ export class StocksController {
 
   @Get()
   async getStocksByQueryString() {
-    const response = await this.stockService.fetchTickersFromQueryString();
-    console.log(response);
-    return response;
+    return await this.stockService.fetchTickersFromQueryString();
   }
 }

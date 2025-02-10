@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Tickers } from '../entity/tickers.entity';
 import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTOMapper';
 
@@ -10,8 +10,11 @@ export class StocksService {
   ) {}
 
   async fetchTickersFromQueryString() {
-    return new TickersEntityDTOMapper().mapTickersEntityToDTO(
-      await this.tickersRepository.findOne<Tickers>(),
-    );
+    const tickers: Tickers | null =
+      await this.tickersRepository.findOne<Tickers>();
+    if (JSON.stringify(tickers) === '{}' || tickers === null) {
+      throw new NotFoundException(`No tickers found`);
+    }
+    return new TickersEntityDTOMapper().mapTickersEntityToDTO(tickers);
   }
 }
