@@ -5,7 +5,6 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
-      console.log(process.env.DATABASE_DIALECT);
       const sequelize: Sequelize = new Sequelize({
         dialect: 'postgres',
         host: process.env.DATABASE_HOST,
