@@ -3,7 +3,8 @@ import { StocksController } from './stocks.controller';
 import { StocksService } from '../service/stocks.service';
 import { tickersProviders } from '../repository/tickers.providers';
 import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTOMapper';
-import { FindAllTickersRequest } from '../stocks.type';
+import { FindAllTickersRequest, PaginationProperties } from '../stocks.type';
+import { TickersDto } from '../dto/tickers.dto';
 
 describe('StockController', () => {
   let stocksController: StocksController;
@@ -20,27 +21,36 @@ describe('StockController', () => {
 
   describe('root', () => {
     it('should return results', async () => {
-      const result = [
-        {
-          id: 5518,
-          ticker_id: 'AAAIF',
-          ticker_name: 'ALTERNATIVE INVSTMENT TR',
-          market: 'otc',
-          locale: 'us',
-          primary_exchange: '',
-          ticker_type: 'FUND',
-          active: true,
-          currency_name: 'USD',
-          cik: '',
-          composite_figi: '',
-          share_class_figi: '',
-          last_updated_utc: '2022-08-26T05:00:07.114Z',
-          currency_symbol: '',
-          base_currency_symbol: '',
-          base_currency_name: '',
-          source_feed: '',
+      const result: { data: TickersDto[]; pageProps: PaginationProperties } = {
+        data: [
+          {
+            id: 5518,
+            ticker_id: 'AAAIF',
+            ticker_name: 'ALTERNATIVE INVSTMENT TR',
+            market: 'otc',
+            locale: 'us',
+            primary_exchange: '',
+            ticker_type: 'FUND',
+            active: true,
+            currency_name: 'USD',
+            cik: '',
+            composite_figi: '',
+            share_class_figi: '',
+            last_updated_utc: '2022-08-26T05:00:07.114Z',
+            currency_symbol: '',
+            base_currency_symbol: '',
+            base_currency_name: '',
+            source_feed: '',
+          },
+        ],
+        pageProps: {
+          page: 1,
+          size: 1,
+          pageSize: 1,
+          totalPages: 1,
+          totalElements: 1,
         },
-      ];
+      };
       jest
         .spyOn(stocksService, 'fetchTickersFromQueryString')
         .mockImplementation(() => Promise.resolve(result));
@@ -49,7 +59,11 @@ describe('StockController', () => {
         page: 0,
         size: 10,
       };
-      const response = await stocksController.getStocksByQueryString(request);
+      const response = await stocksController.getStocksByQueryString(
+        request.queryString,
+        request.page,
+        request.size,
+      );
       expect(response).toBe(result);
     });
   });
