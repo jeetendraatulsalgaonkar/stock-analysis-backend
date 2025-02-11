@@ -54,4 +54,30 @@ export class StocksService {
     };
     return Promise.resolve(response);
   }
+
+  async fetchAllTickers(page: number, size: number) {
+    const tickers: { rows: Tickers[]; count: number } =
+      await this.tickersRepository.findAndCountAll({
+        order: ['ticker_id'],
+        offset: page * size,
+        limit: size,
+      });
+    if (JSON.stringify(tickers.rows) === '[]') {
+      throw new NotFoundException(`No tickers found`);
+    }
+    const data: TickersDto[] = tickers.rows.map((ticker) =>
+      this.tickersEntityDTOMapper.mapTickersEntityToDTO(ticker),
+    );
+    const response: { data: TickersDto[]; pageProps: PaginationProperties } = {
+      data,
+      pageProps: {
+        page,
+        size,
+        pageSize: size,
+        totalPages: Math.ceil(tickers.count / size),
+        totalElements: tickers.count,
+      },
+    };
+    return Promise.resolve(response);
+  }
 }

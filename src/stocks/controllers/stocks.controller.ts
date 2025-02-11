@@ -42,4 +42,30 @@ export class StocksController {
       size,
     );
   }
+
+  @Get('page=:page&size=:size')
+  async getAllStocks(
+    @Param(
+      'page',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+        exceptionFactory: (e) => {
+          throw new BadRequestException(e);
+        },
+      }),
+    )
+    page: number,
+    @Param(
+      'size',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+        exceptionFactory: (e) => {
+          throw new BadRequestException(e);
+        },
+      }),
+    )
+    size: number,
+  ) {
+    return await this.stockService.fetchAllTickers(page, size);
+  }
 }
