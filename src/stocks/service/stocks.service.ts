@@ -36,7 +36,6 @@ export class StocksService {
         offset: page * size,
         limit: size,
       });
-    console.log(tickers);
     if (JSON.stringify(tickers.rows) === '[]') {
       throw new NotFoundException(`No tickers found`);
     }
