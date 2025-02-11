@@ -79,8 +79,16 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/stocks/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "allExceptions.filter.ts",
+      "\\filter\\.ts",
+      "\\module\\.ts",
+      "\\plugin\\.ts",
+      "\\providers\\.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

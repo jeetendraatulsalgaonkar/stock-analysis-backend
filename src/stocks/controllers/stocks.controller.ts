@@ -36,7 +36,6 @@ export class StocksController {
     )
     size: number,
   ) {
-    console.log(queryString, page, size);
     return await this.stockService.fetchTickersFromQueryString(
       queryString,
       page,
