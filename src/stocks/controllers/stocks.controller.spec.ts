@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { StocksController } from './stocks.controller';
 import { StocksService } from '../service/stocks.service';
 import { tickersProviders } from '../repository/tickers.providers';
-import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTOMapper';
+import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTO.mapper';
 import { FindAllTickersRequest, PaginationProperties } from '../stocks.type';
 import { TickersDto } from '../dto/tickers.dto';
 

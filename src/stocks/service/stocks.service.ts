@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Tickers } from '../entity/tickers.entity';
-import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTOMapper';
+import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTO.mapper';
 import { Op } from 'sequelize';
 import { TickersDto } from '../dto/tickers.dto';
 import { PaginationProperties } from '../stocks.type';
@@ -20,22 +20,24 @@ export class StocksService {
     page: number,
     size: number,
   ) {
-    const tickers = await this.tickersRepository.findAndCountAll({
-      where: {
-        [Op.or]: [
-          {
-            ticker_id: { [Op.like]: `%${queryString}%` },
-          },
-          {
-            ticker_name: { [Op.like]: `%${queryString}%` },
-          },
-        ],
-      },
-      order: ['ticker_id'],
-      offset: page * size,
-      limit: size,
-    });
-    if (JSON.stringify(tickers) === '[]' || tickers === null) {
+    const tickers: { rows: Tickers[]; count: number } =
+      await this.tickersRepository.findAndCountAll({
+        where: {
+          [Op.or]: [
+            {
+              ticker_id: { [Op.like]: `%${queryString}%` },
+            },
+            {
+              ticker_name: { [Op.like]: `%${queryString}%` },
+            },
+          ],
+        },
+        order: ['ticker_id'],
+        offset: page * size,
+        limit: size,
+      });
+    console.log(tickers);
+    if (JSON.stringify(tickers.rows) === '[]') {
       throw new NotFoundException(`No tickers found`);
     }
     const data: TickersDto[] = tickers.rows.map((ticker) =>

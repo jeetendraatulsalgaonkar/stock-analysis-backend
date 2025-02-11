@@ -3,7 +3,7 @@ import { DatabaseModule } from './database.module';
 import { StocksController } from '../controllers/stocks.controller';
 import { StocksService } from '../service/stocks.service';
 import { tickersProviders } from '../repository/tickers.providers';
-import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTOMapper';
+import { TickersEntityDTOMapper } from '../mapper/tickersEntityDTO.mapper';
 
 @Module({
   imports: [DatabaseModule],
